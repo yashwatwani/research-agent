@@ -1,4 +1,4 @@
-import phoenix as px
+import os
 from openinference.instrumentation.openai import OpenAIInstrumentor
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
@@ -8,11 +8,20 @@ from src.config import PHOENIX_PORT
 
 
 def init_tracing():
-    import os
-    os.environ["PHOENIX_PORT"] = str(PHOENIX_PORT)
-    
-    session = px.launch_app()
-    print(f"Phoenix UI running at {session.url}")
+    try:
+        import httpx
+        response = httpx.get(f"http://localhost:{PHOENIX_PORT}/")
+        phoenix_already_running = response.status_code == 200
+    except Exception:
+        phoenix_already_running = False
+
+    if not phoenix_already_running:
+        import phoenix as px
+        os.environ["PHOENIX_PORT"] = str(PHOENIX_PORT)
+        session = px.launch_app()
+        print(f"Phoenix started at {session.url}")
+    else:
+        print(f"Phoenix already running at http://localhost:{PHOENIX_PORT}")
 
     otlp_exporter = OTLPSpanExporter(
         endpoint=f"http://localhost:{PHOENIX_PORT}/v1/traces"
@@ -23,4 +32,4 @@ def init_tracing():
     trace.set_tracer_provider(provider)
 
     OpenAIInstrumentor().instrument()
-    print("Tracing active. All OpenAI calls are now being recorded.")
+    print("Tracing active.")

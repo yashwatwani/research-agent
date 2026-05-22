@@ -24,6 +24,7 @@ TOOL_DEFINITION = {
 
 
 async def search_web(query: str, num_results: int = MAX_SEARCH_RESULTS) -> list[dict]:
+    #  hits SerpApi with a query, returns titles, URLs and snippets
     params = {
         "q": query,
         "num": num_results,
@@ -45,6 +46,7 @@ async def search_web(query: str, num_results: int = MAX_SEARCH_RESULTS) -> list[
 
 
 async def handle_tool_call(tool_name: str, arguments: dict) -> str:
+    # MCP entry point, routes tool name to the right function
     if tool_name == "search_web":
         results = await search_web(
             query=arguments["query"],
