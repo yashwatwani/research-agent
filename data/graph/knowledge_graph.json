@@ -1,0 +1,210 @@
+{
+  "nodes": [
+    {
+      "id": "Anthropic"
+    },
+    {
+      "id": "MCP"
+    },
+    {
+      "id": "Linux Foundation"
+    },
+    {
+      "id": "OpenAI"
+    },
+    {
+      "id": "Microsoft"
+    },
+    {
+      "id": "Google"
+    },
+    {
+      "id": "ADK framework"
+    },
+    {
+      "id": "Claude"
+    },
+    {
+      "id": "pgvector team"
+    },
+    {
+      "id": "pgvector"
+    },
+    {
+      "id": "LangChain"
+    },
+    {
+      "id": "RAG"
+    },
+    {
+      "id": "Retrieval Augmented Generation"
+    },
+    {
+      "id": "Meta AI research"
+    },
+    {
+      "id": "Postgres extension"
+    },
+    {
+      "id": "vector similarity search"
+    },
+    {
+      "id": "Pinecone"
+    },
+    {
+      "id": "dedicated vector database"
+    },
+    {
+      "id": "RAG applications"
+    },
+    {
+      "id": "Weaviate"
+    },
+    {
+      "id": "vector database"
+    },
+    {
+      "id": "hybrid search"
+    },
+    {
+      "id": "RAG pipelines"
+    },
+    {
+      "id": "multiple vector stores"
+    },
+    {
+      "id": "OpenAI embeddings"
+    },
+    {
+      "id": "semantic search"
+    }
+  ],
+  "links": [
+    {
+      "source": "Anthropic",
+      "target": "MCP",
+      "relation": "developed",
+      "source_title": "MCP Ecosystem"
+    },
+    {
+      "source": "Anthropic",
+      "target": "Claude",
+      "relation": "makes",
+      "source_title": "MCP Ecosystem"
+    },
+    {
+      "source": "MCP",
+      "target": "Linux Foundation",
+      "relation": "was donated to",
+      "source_title": "MCP Ecosystem"
+    },
+    {
+      "source": "OpenAI",
+      "target": "MCP",
+      "relation": "adopted",
+      "source_title": "MCP Ecosystem"
+    },
+    {
+      "source": "Microsoft",
+      "target": "MCP",
+      "relation": "adopted",
+      "source_title": "MCP Ecosystem"
+    },
+    {
+      "source": "Google",
+      "target": "MCP",
+      "relation": "integrated",
+      "source_title": "MCP Ecosystem"
+    },
+    {
+      "source": "Google",
+      "target": "ADK framework",
+      "relation": "integrated",
+      "source_title": "MCP Overview"
+    },
+    {
+      "source": "pgvector team",
+      "target": "pgvector",
+      "relation": "created",
+      "source_title": "MCP Overview"
+    },
+    {
+      "source": "pgvector",
+      "target": "Postgres extension",
+      "relation": "is",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "pgvector",
+      "target": "vector similarity search",
+      "relation": "enables",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "LangChain",
+      "target": "MCP",
+      "relation": "supports",
+      "source_title": "MCP Ecosystem"
+    },
+    {
+      "source": "LangChain",
+      "target": "RAG pipelines",
+      "relation": "provides",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "LangChain",
+      "target": "multiple vector stores",
+      "relation": "connect to",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "RAG",
+      "target": "Retrieval Augmented Generation",
+      "relation": "stands for",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "Meta AI research",
+      "target": "RAG",
+      "relation": "popularized",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "Pinecone",
+      "target": "dedicated vector database",
+      "relation": "is",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "Pinecone",
+      "target": "RAG applications",
+      "relation": "used for",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "Weaviate",
+      "target": "vector database",
+      "relation": "is",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "Weaviate",
+      "target": "hybrid search",
+      "relation": "supports",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "OpenAI embeddings",
+      "target": "pgvector",
+      "relation": "used with",
+      "source_title": "RAG Landscape"
+    },
+    {
+      "source": "OpenAI embeddings",
+      "target": "semantic search",
+      "relation": "used for",
+      "source_title": "RAG Landscape"
+    }
+  ]
+}
