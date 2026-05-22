@@ -5,6 +5,7 @@ load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 BRAVE_SEARCH_API_KEY = os.getenv("BRAVE_SEARCH_API_KEY")
+SERPAPI_KEY = os.getenv("SERPAPI_KEY")
 DATABASE_URL = os.getenv("DATABASE_URL")
 PHOENIX_PORT = int(os.getenv("PHOENIX_PORT", 6006))
 
