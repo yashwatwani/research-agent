@@ -15,7 +15,7 @@ Built to understand every layer of the AI agent stack — not just use it.
 - Layer 3: Three-tier memory — in-context state, RAG via pgvector, Graph RAG via NetworkX
 - Layer 4: Google ADK orchestration (plan → search → retrieve → synthesise)
 - Layer 5: Arize Phoenix tracing and evals
-- Layer 6: Guardrails — input filtering, tool allow-list, output validation
+- Layer 6: guardrails — input filtering, tool allow-list, output validation
 
 ---
 
@@ -209,7 +209,7 @@ research-agent/
 | 4 | RAG via pgvector | In progress |
 | 5 | Graph RAG via NetworkX | Upcoming |
 | 6 | ADK agent loop | Upcoming |
-| 7 | Guardrails + full evals | Upcoming |
+| 7 | guardrails + full evals | Upcoming |
 
 ---
 

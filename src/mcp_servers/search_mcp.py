@@ -1,6 +1,7 @@
 import json
 from serpapi import GoogleSearch
 from src.config import SERPAPI_KEY, MAX_SEARCH_RESULTS
+from src.guardrails.tool_allowlist import check_tool
 
 TOOL_DEFINITION = {
     "name": "search_web",
@@ -47,6 +48,14 @@ async def search_web(query: str, num_results: int = MAX_SEARCH_RESULTS) -> list[
 
 async def handle_tool_call(tool_name: str, arguments: dict) -> str:
     # MCP entry point, routes tool name to the right function
+    # Phase 7: soft allow-list — log violations, return error string (don't raise)
+
+    is_allowed, reason = check_tool(tool_name)
+    if not is_allowed:
+        # we *could* still execute here (true "soft" mode), but for unknown tools
+        # we have nothing to execute — there's no dispatch path. Return error.
+        return json.dumps({"error": reason})
+
     if tool_name == "search_web":
         results = await search_web(
             query=arguments["query"],
@@ -54,4 +63,6 @@ async def handle_tool_call(tool_name: str, arguments: dict) -> str:
         )
         return json.dumps(results, indent=2)
 
-    raise ValueError(f"Unknown tool: {tool_name}")
+    # safety net — if a tool is in the allow-list but has no dispatch case,
+    # log as violation and return error (different from "unknown tool" above)
+    return json.dumps({"error": f"tool '{tool_name}' is allow-listed but has no dispatcher"})
