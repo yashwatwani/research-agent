@@ -1,0 +1,335 @@
+
+<h2 class="sr-only">Research agent file flow diagram showing which files are touched for each use case</h2>
+
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-sans); }
+
+.wrap { padding: 1rem 0; }
+
+.tabs { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.tab {
+  padding: 6px 14px;
+  border-radius: var(--border-radius-md);
+  border: 0.5px solid var(--color-border-secondary);
+  background: var(--color-background-primary);
+  font-size: 13px;
+  cursor: pointer;
+  color: var(--color-text-secondary);
+  transition: all .15s;
+}
+.tab:hover { background: var(--color-background-secondary); }
+.tab.active {
+  background: var(--color-background-info);
+  color: var(--color-text-info);
+  border-color: var(--color-border-info);
+  font-weight: 500;
+}
+
+.legend { display: flex; gap: 16px; margin-bottom: 1.25rem; flex-wrap: wrap; }
+.leg { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--color-text-secondary); }
+.leg-dot { width: 10px; height: 10px; border-radius: 2px; flex-shrink: 0; }
+.dot-entry   { background: #3B8BD4; }
+.dot-guard   { background: #D85A30; }
+.dot-agent   { background: #1D9E75; }
+.dot-memory  { background: #B084F5; }
+.dot-mcp     { background: #EF9F27; }
+.dot-eval    { background: #888780; }
+.dot-report  { background: #3B8BD4; opacity: .5; }
+.dot-log     { background: #D4537E; }
+
+.flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.layer {
+  display: flex;
+  align-items: stretch;
+  min-height: 44px;
+  border-radius: 0;
+  position: relative;
+}
+
+.layer-label {
+  width: 90px;
+  flex-shrink: 0;
+  font-size: 11px;
+  color: var(--color-text-tertiary);
+  letter-spacing: .03em;
+  display: flex;
+  align-items: center;
+  padding-right: 10px;
+  text-align: right;
+  justify-content: flex-end;
+}
+
+.layer-files {
+  flex: 1;
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 6px 0;
+  border-left: 0.5px solid var(--color-border-tertiary);
+  padding-left: 12px;
+}
+
+.file {
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-family: var(--font-mono);
+  border: 0.5px solid transparent;
+  transition: all .2s;
+  opacity: .2;
+  cursor: default;
+  white-space: nowrap;
+}
+
+.file.active {
+  opacity: 1;
+  border-color: transparent;
+}
+
+.file.entry   { background: #E6F1FB; color: #0C447C; border-color: #B5D4F4; }
+.file.guard   { background: #FAECE7; color: #712B13; border-color: #F5C4B3; }
+.file.agent   { background: #E1F5EE; color: #085041; border-color: #9FE1CB; }
+.file.memory  { background: #EEEDFE; color: #3C3489; border-color: #CECBF6; }
+.file.mcp     { background: #FAEEDA; color: #633806; border-color: #FAC775; }
+.file.eval    { background: #F1EFE8; color: #444441; border-color: #D3D1C7; }
+.file.log     { background: #FBEAF0; color: #72243E; border-color: #F4C0D1; }
+
+.separator {
+  height: 0.5px;
+  background: var(--color-border-tertiary);
+  margin: 4px 0 4px 102px;
+}
+
+.arrow-col {
+  width: 90px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding-right: 10px;
+}
+
+.down-arrow {
+  color: var(--color-text-tertiary);
+  font-size: 14px;
+  padding: 0;
+}
+
+.desc-box {
+  background: var(--color-background-secondary);
+  border: 0.5px solid var(--color-border-tertiary);
+  border-radius: var(--border-radius-md);
+  padding: 10px 14px;
+  margin-bottom: 1.25rem;
+  font-size: 13px;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  min-height: 40px;
+}
+
+.desc-box strong { color: var(--color-text-primary); font-weight: 500; }
+</style>
+
+<div class="wrap">
+  <div class="tabs" id="tabs"></div>
+
+  <div class="desc-box" id="desc">Select a use case above to see which files are touched.</div>
+
+  <div class="legend">
+    <div class="leg"><div class="leg-dot dot-entry"></div>Entry point</div>
+    <div class="leg"><div class="leg-dot dot-guard"></div>Guardrails</div>
+    <div class="leg"><div class="leg-dot dot-agent"></div>Agent / orchestration</div>
+    <div class="leg"><div class="leg-dot dot-memory"></div>Memory</div>
+    <div class="leg"><div class="leg-dot dot-mcp"></div>MCP / search</div>
+    <div class="leg"><div class="leg-dot dot-eval"></div>Eval</div>
+    <div class="leg"><div class="leg-dot dot-log"></div>Logging</div>
+  </div>
+
+  <div class="flow" id="flow"></div>
+</div>
+
+<script>
+const ALL_LAYERS = [
+  { label: "Entry",        files: [
+    { name: "test_agent.py",   type: "entry", id: "test_agent" },
+    { name: "main.py",         type: "entry", id: "main" },
+    { name: "run_eval.py",     type: "entry", id: "run_eval" },
+  ]},
+  { label: "Tracing",      files: [
+    { name: "src/eval/tracer.py", type: "eval", id: "tracer" },
+  ]},
+  { label: "Guardrails",   files: [
+    { name: "filters.py",         type: "guard", id: "filters" },
+    { name: "input_filter.py",    type: "guard", id: "input_filter" },
+    { name: "tool_allowlist.py",  type: "guard", id: "tool_allow" },
+    { name: "output_validator.py",type: "guard", id: "output_val" },
+    { name: "guardrails/logger.py",type: "guard", id: "g_logger" },
+  ]},
+  { label: "Agent",        files: [
+    { name: "researcher.py",      type: "agent", id: "researcher" },
+    { name: "suggestions.py",     type: "agent", id: "suggestions" },
+    { name: "agent/logger.py",    type: "log",   id: "a_logger" },
+  ]},
+  { label: "MCP / Search", files: [
+    { name: "search_mcp.py",      type: "mcp", id: "search_mcp" },
+  ]},
+  { label: "Memory",       files: [
+    { name: "memory_manager.py",  type: "memory", id: "mem_mgr" },
+    { name: "retriever.py",       type: "memory", id: "retriever" },
+    { name: "vector_store.py",    type: "memory", id: "vec_store" },
+    { name: "graph_store.py",     type: "memory", id: "gph_store" },
+  ]},
+  { label: "Eval",         files: [
+    { name: "dataset.py",         type: "eval", id: "dataset" },
+    { name: "runner.py",          type: "eval", id: "runner" },
+    { name: "scorers/base.py",    type: "eval", id: "base" },
+    { name: "scorers/relevance.py",type: "eval", id: "rel" },
+    { name: "scorers/groundedness.py",type: "eval", id: "gnd" },
+    { name: "scorers/completeness.py",type: "eval", id: "cmp" },
+    { name: "reporter.py",        type: "eval", id: "reporter" },
+  ]},
+  { label: "Config",       files: [
+    { name: "src/config.py",      type: "eval", id: "config" },
+  ]},
+];
+
+const USE_CASES = [
+  {
+    label: "CLI question",
+    desc: "<strong>python test_agent.py -q \"What is MCP?\"</strong> — CLI entry point. Initialises tracing, runs the full agent pipeline, prints the report, logs the interaction.",
+    active: ["test_agent","tracer","config","filters","input_filter","tool_allow","output_val","g_logger","researcher","a_logger","search_mcp","mem_mgr","retriever","vec_store","gph_store"],
+  },
+  {
+    label: "Streamlit UI",
+    desc: "<strong>streamlit run main.py</strong> — Streamlit entry point. Same pipeline as CLI but renders in browser. Blocked questions show suggestions.",
+    active: ["main","tracer","config","filters","input_filter","tool_allow","output_val","g_logger","researcher","suggestions","a_logger","search_mcp","mem_mgr","retriever","vec_store","gph_store"],
+  },
+  {
+    label: "Memory hit",
+    desc: "<strong>Agent finds good context in memory</strong> — skips web search entirely. input_filter → check_memory → synthesise → output_validator. No MCP call.",
+    active: ["test_agent","main","tracer","config","filters","input_filter","output_val","g_logger","researcher","a_logger","mem_mgr","retriever","vec_store","gph_store"],
+  },
+  {
+    label: "Memory miss",
+    desc: "<strong>Agent finds nothing useful in memory</strong> — runs full pipeline. input_filter → check_memory → plan → search → store → retrieve → synthesise → output_validator.",
+    active: ["test_agent","main","tracer","config","filters","input_filter","tool_allow","output_val","g_logger","researcher","a_logger","search_mcp","mem_mgr","retriever","vec_store","gph_store"],
+  },
+  {
+    label: "Input blocked",
+    desc: "<strong>Out-of-scope or injection attempt</strong> — stops at input_filter. No agent loop runs. Suggestions generated for out-of-scope questions. Violation logged to JSONL + Phoenix.",
+    active: ["test_agent","main","tracer","config","filters","input_filter","g_logger","suggestions","a_logger"],
+  },
+  {
+    label: "Output blocked",
+    desc: "<strong>Groundedness score below threshold</strong> — full agent runs but output_validator blocks the report. Score + reasoning logged. User sees block message.",
+    active: ["test_agent","main","tracer","config","filters","input_filter","output_val","g_logger","researcher","a_logger","search_mcp","mem_mgr","retriever","vec_store","gph_store"],
+  },
+  {
+    label: "store_source",
+    desc: "<strong>Storing a new web result</strong> — memory_manager calls both vector_store and graph_store. SHA-256 hash checked first. Duplicates silently skipped at both layers.",
+    active: ["config","mem_mgr","vec_store","gph_store"],
+  },
+  {
+    label: "Graph route",
+    desc: "<strong>Relationship question</strong> — retriever.py classifies query as graph-type. query_graph runs. synthesise_node also pulls vector context as background.",
+    active: ["tracer","config","researcher","mem_mgr","retriever","gph_store","vec_store"],
+  },
+  {
+    label: "Vector route",
+    desc: "<strong>Concept question</strong> — retriever.py classifies query as vector-type. cosine similarity search via pgvector. Top-k chunks returned to synthesise_node.",
+    active: ["tracer","config","researcher","mem_mgr","retriever","vec_store"],
+  },
+  {
+    label: "Run eval",
+    desc: "<strong>python run_eval.py</strong> — runs full agent on 15 test questions, scores each output on relevance, groundedness, completeness. Writes JSON + markdown + Phoenix dataset.",
+    active: ["run_eval","tracer","config","dataset","runner","base","rel","gnd","cmp","reporter","filters","input_filter","output_val","g_logger","researcher","a_logger","search_mcp","mem_mgr","retriever","vec_store","gph_store"],
+  },
+  {
+    label: "make eval-edge",
+    desc: "<strong>make eval-edge</strong> — same as run eval but subset=edge (2 questions). Quick smoke test. Same file path, just fewer questions.",
+    active: ["run_eval","tracer","config","dataset","runner","base","rel","gnd","cmp","reporter","filters","input_filter","output_val","g_logger","researcher","a_logger"],
+  },
+  {
+    label: "test_tracing.py",
+    desc: "<strong>python test_tracing.py</strong> — verifies Phoenix tracing is active. Calls init_tracing(), makes one OpenAI call, checks it appears in Phoenix UI.",
+    active: ["tracer","config"],
+  },
+  {
+    label: "test_dedup.py",
+    desc: "<strong>make test-dedup</strong> — ingests same document twice, asserts second call returns 0 new chunks and 0 new triples. Verifies both dedup layers.",
+    active: ["config","mem_mgr","vec_store","gph_store"],
+  },
+  {
+    label: "test_guardrails.py",
+    desc: "<strong>make test-guardrails</strong> — tests input filter (regex + LLM), tool allow-list, output validator independently, then runs end-to-end agent test.",
+    active: ["tracer","config","filters","input_filter","tool_allow","output_val","g_logger","researcher","a_logger","mem_mgr","retriever","vec_store","gph_store"],
+  },
+];
+
+let active = null;
+
+function render(ucIndex) {
+  active = ucIndex;
+  const uc = ucIndex !== null ? USE_CASES[ucIndex] : null;
+  const activeSet = uc ? new Set(uc.active) : new Set();
+
+  document.getElementById("desc").innerHTML = uc
+    ? uc.desc
+    : "Select a use case above to see which files are touched.";
+
+  document.querySelectorAll(".tab").forEach((t, i) => {
+    t.classList.toggle("active", i === ucIndex);
+  });
+
+  const flow = document.getElementById("flow");
+  flow.innerHTML = "";
+
+  ALL_LAYERS.forEach((layer, li) => {
+    const layerDiv = document.createElement("div");
+    layerDiv.className = "layer";
+
+    const lbl = document.createElement("div");
+    lbl.className = "layer-label";
+    lbl.textContent = layer.label;
+    layerDiv.appendChild(lbl);
+
+    const files = document.createElement("div");
+    files.className = "layer-files";
+
+    layer.files.forEach(f => {
+      const pill = document.createElement("div");
+      pill.className = "file " + f.type;
+      if (activeSet.has(f.id)) pill.classList.add("active");
+      pill.textContent = f.name;
+      files.appendChild(pill);
+    });
+
+    layerDiv.appendChild(files);
+    flow.appendChild(layerDiv);
+
+    if (li < ALL_LAYERS.length - 1) {
+      const sep = document.createElement("div");
+      sep.className = "separator";
+      flow.appendChild(sep);
+    }
+  });
+}
+
+const tabs = document.getElementById("tabs");
+USE_CASES.forEach((uc, i) => {
+  const btn = document.createElement("button");
+  btn.className = "tab";
+  btn.textContent = uc.label;
+  btn.onclick = () => render(i);
+  tabs.appendChild(btn);
+});
+
+render(null);
+</script>
