@@ -216,3 +216,6 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+data/logs/
+data/graph/knowledge_graph.pkl
+data/graph/knowledge_graph.html

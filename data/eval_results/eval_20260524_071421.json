@@ -1,0 +1,75 @@
+{
+  "run_id": "20260524_071421",
+  "started_at": "2026-05-24T07:14:21.731374Z",
+  "total_elapsed_seconds": 16.8,
+  "aggregate": {
+    "total_questions": 2,
+    "valid_runs": 2,
+    "agent_errors": 0,
+    "blocked_by_guardrail": 1,
+    "mean_scores": {
+      "relevance": 0.5,
+      "groundedness": 0.35,
+      "completeness": 0.35,
+      "average": 0.4
+    },
+    "per_category": {
+      "edge": {
+        "n": 2,
+        "mean_average": 0.4
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "edge-001",
+      "category": "edge",
+      "question": "What is the capital of France?",
+      "report": "Request blocked by input filter.\n\nReason: out_of_scope: This is a factual question rather than a research inquiry.",
+      "context": "",
+      "blocked_by_guardrail": true,
+      "block_reason": "out_of_scope: This is a factual question rather than a research inquiry.",
+      "elapsed_seconds": 3.17,
+      "scores": {
+        "relevance": {
+          "score": 0.0,
+          "reasoning": "The report does not address the question at all."
+        },
+        "groundedness": {
+          "score": 0.0,
+          "reasoning": "no retrieved context \u2014 report cannot be grounded"
+        },
+        "completeness": {
+          "score": 0.0,
+          "reasoning": "The report does not address the question at all."
+        },
+        "average": 0.0
+      }
+    },
+    {
+      "id": "edge-002",
+      "category": "edge",
+      "question": "Explain how prompt engineering affects agent quality in research workflows.",
+      "report": "## Summary\nPrompt engineering significantly impacts the quality of AI agents in research workflows by influencing the output quality of language models. Mastering prompt engineering is essential as it ensures higher-quality deliverables from single task AI agents.\n\n## Key Findings\n- Higher-quality prompt engineering skills directly affect the quality of output from language models, indicating its importance.\n- Learning and applying prompt engineering skills are crucial for effective AI agent outputs, especially in single-task environments.\n\n## Sources\n- Building AI Agents: Prompt Engineering for Beginners [Part 3]\n- AI literacy and its implications for prompt engineering ...",
+      "context": "Source: Building AI Agents: Prompt Engineering for Beginners [Part 3]\nContent: In this video we're going to focus on prompt engineering specifically for single task AI agents.\n\nSource: AI literacy and its implications for prompt engineering ...\nContent: The results show that higher-quality prompt engineering skills predict the quality of LLM output, suggesting that prompt engineering is indeed a required skill ...\n\nSource: Building a Deep Research Agent\nContent: This guide takes a deep dive into the practical aspects of context engineering through the development of a basic deep research agent, exploring ...\n\n",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 8.28,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses how prompt engineering affects agent quality in research workflows."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "reasoning": "Most claims about the importance of prompt engineering are supported, but specific details about its impact on research workflows are not directly mentioned in the context."
+        },
+        "completeness": {
+          "score": 0.7,
+          "reasoning": "The report covers the impact of prompt engineering on agent quality and its importance in research workflows, but lacks detail on specific mechanisms or examples of how it affects agent quality."
+        },
+        "average": 0.8
+      }
+    }
+  ]
+}

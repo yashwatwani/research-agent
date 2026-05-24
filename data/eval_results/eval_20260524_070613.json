@@ -1,0 +1,405 @@
+{
+  "run_id": "20260524_070613",
+  "started_at": "2026-05-24T07:06:13.493305Z",
+  "total_elapsed_seconds": 355.7,
+  "aggregate": {
+    "total_questions": 15,
+    "valid_runs": 15,
+    "agent_errors": 0,
+    "blocked_by_guardrail": 3,
+    "mean_scores": {
+      "relevance": 0.8,
+      "groundedness": 0.76,
+      "completeness": 0.76,
+      "average": 0.773
+    },
+    "per_category": {
+      "concept": {
+        "n": 4,
+        "mean_average": 0.975
+      },
+      "domain": {
+        "n": 4,
+        "mean_average": 1.0
+      },
+      "comparison": {
+        "n": 2,
+        "mean_average": 0.734
+      },
+      "relationship": {
+        "n": 2,
+        "mean_average": 0.666
+      },
+      "current": {
+        "n": 1,
+        "mean_average": 0.0
+      },
+      "edge": {
+        "n": 2,
+        "mean_average": 0.45
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "gen-001",
+      "category": "concept",
+      "question": "What is a transformer architecture in deep learning?",
+      "report": "## Summary\nA transformer architecture in deep learning is a neural network model designed to process sequential data, primarily using a multi-head attention mechanism. It has been particularly impactful in the fields of natural language processing and artificial intelligence, transforming how models handle tasks involving sequences of data.\n\n## Key findings\n- Transformer is a neural network architecture used in machine learning for tasks like NLP and computer-related applications.\n- It has fundamentally changed the approach to artificial intelligence.\n- The architecture is based on the multi-head attention mechanism.\n- It is particularly effective at handling sequential data, which is central to the success of large language models.\n- Transformers are designed to transform input sequences into output sequences.\n\n## Sources\n- Transformers in Machine Learning\n- LLM Transformer Model Visually Explained\n- Transformer (deep learning)\n- What is a Transformer Model? | IBM\n- What are Transformers in Artificial Intelligence?",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 40.33,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses the question by explaining what a transformer architecture is in deep learning, focusing on its key components and applications."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "Every claim in the report is directly supported by the provided context."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers the key aspects of what a transformer architecture is in deep learning, including its purpose, mechanism, and impact on fields like NLP."
+        },
+        "average": 1.0
+      }
+    },
+    {
+      "id": "gen-002",
+      "category": "concept",
+      "question": "How does cosine similarity work in vector search?",
+      "report": "## Summary\nCosine similarity measures the similarity between two vectors by calculating the cosine of the angle between them, ranging from -1 to 1. A cosine similarity score closer to 1 indicates more similarity, while a score of 0 suggests orthogonality, meaning the vectors are independent.\n\n## Key findings\n- Cosine similarity calculates how similar two vectors are by assessing the cosine of the angle between them.\n- The range for cosine similarity is -1 to 1.\n- A cosine similarity of 1 means the vectors are identical.\n- A cosine similarity of 0 implies that the vectors are orthogonal and have no similarity.\n- To obtain cosine similarity from cosine distance, the distance can be subtracted from 1.\n\n## Sources\n- Vector Similarity Search with PostgreSQL and pgvector\n- Extracting Cosine Similarity Scores with pgvector\n- Vector Similarity Search with PostgreSQL's pgvector",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 7.06,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses how cosine similarity works in vector search by explaining its calculation and interpretation."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "All claims in the report are directly supported by the provided context."
+        },
+        "completeness": {
+          "score": 0.7,
+          "reasoning": "The report explains how cosine similarity measures the angle between vectors and its range, but it lacks details on its application in vector search."
+        },
+        "average": 0.9
+      }
+    },
+    {
+      "id": "gen-003",
+      "category": "concept",
+      "question": "What is the difference between RAG and fine-tuning?",
+      "report": "## Summary\nThe primary difference between RAG (Retrieval-Augmented Generation) and fine-tuning is that RAG enhances large language models by integrating them with external proprietary databases, whereas fine-tuning involves adjusting the model parameters to perform specific tasks, like summarization. RAG tends to retain more of the core capabilities of the original model and can outperform fine-tuning in certain scenarios.\n\n## Key findings\n- RAG connects large language models to an organization\u2019s proprietary databases, optimizing their outputs with external authoritative knowledge sources.\n- Fine-tuning adjusts model parameters to excel at additional tasks not originally included in the model's capabilities, such as summarization.\n- Combining RAG and fine-tuning within a single model is possible, suggesting hybrid approaches can be used depending on the needs.\n- RAG often achieves better performance compared to traditional fine-tuning while still preserving more of the original model\u2019s capabilities.\n\n## Sources\n- Source: RAG vs. Fine-tuning\n- Source: Comparing Retrieval Augmented Generation and fine-tuning\n- Source: When to Apply RAG vs Fine-Tuning\n- Source: What is RAG? - Retrieval-Augmented Generation AI",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 41.23,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses the question by explaining the differences between RAG and fine-tuning."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "Every claim in the report is directly supported by the provided context."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers the key aspects of the differences between RAG and fine-tuning, including their definitions, functionalities, and potential performance outcomes."
+        },
+        "average": 1.0
+      }
+    },
+    {
+      "id": "gen-004",
+      "category": "concept",
+      "question": "Why are embeddings useful for semantic search?",
+      "report": "## Summary\nEmbeddings are useful for semantic search because they convert text into vectors that capture semantic meaning, enhancing the search's ability to understand and retrieve relevant content. This leads to a more scalable, efficient, and accurate search experience by enabling vector similarity search methods.\n\n## Key findings\n- Embeddings represent text as numerical vectors, capturing the semantic meaning of words or phrases.\n- They improve semantic search scalability and efficiency by facilitating vector similarity search techniques.\n- The use of embeddings enhances full-text search by allowing for better recall and flexible filtering of unstructured data.\n- Representing text as vectors supports more accurate retrieval of information based on the actual semantic content rather than just keyword matching.\n\n## Sources\n- What is Semantic Search?\n- What is semantic search? How it works, use cases & more\n- How does text embedding improve full-text search?\n- What is the purpose of embeddings in natural language ...\n- Embeddings Databases: Fix Slow, Shallow Search",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 32.81,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses why embeddings are useful for semantic search by explaining their role in capturing semantic meaning and improving search efficiency."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "All claims in the report are directly supported by the context provided."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers all key aspects of why embeddings are useful for semantic search, including their role in capturing semantic meaning, improving scalability, efficiency, and accuracy, and enabling vector similarity search methods."
+        },
+        "average": 1.0
+      }
+    },
+    {
+      "id": "dom-001",
+      "category": "domain",
+      "question": "What is the Model Context Protocol and why was it introduced?",
+      "report": "## Summary\nThe Model Context Protocol (MCP) is an open standard designed to enable secure and efficient connections between AI applications and external data sources and tools. It was introduced to address the fragmentation in AI frameworks by providing a universal interface for discovering and using external tools and data.\n\n## Key findings\n- MCP allows AI applications to connect with external data sources, tools, and systems securely and seamlessly.\n- It acts as a standardization layer, improving the AI models' ability to communicate with external services.\n- MCP was developed by Anthropic and donated to the Linux Foundation in December 2025.\n- The protocol has been adopted by major companies like OpenAI, Google, and Microsoft.\n- MCP provided a solution to the fragmentation of AI frameworks by establishing a universal standard interface.\n- By early 2026, the protocol saw significant adoption with over 97 million monthly SDK downloads.\n- Although it solves many interoperability issues, security remains a challenge, particularly concerning prompt injection attacks.\n\n## Sources\n- Introducing the Model Context Protocol\n- What is the Model Context Protocol (MCP)?\n- What is Model Context Protocol (MCP)? A guide\n- MCP Overview",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 31.64,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses what the Model Context Protocol is and why it was introduced."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "Every claim in the report is directly supported by the provided context."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers both what the Model Context Protocol is and why it was introduced, addressing all key aspects of the question."
+        },
+        "average": 1.0
+      }
+    },
+    {
+      "id": "dom-002",
+      "category": "domain",
+      "question": "What is pgvector and how does it integrate with PostgreSQL?",
+      "report": "## Summary\npgvector is an open-source extension designed to integrate vector similarity search capabilities into PostgreSQL. It allows for the storage, querying, and indexing of machine learning-generated vectors within the PostgreSQL database environment.\n\n## Key findings\n- pgvector is specifically developed to provide vector similarity search functionalities.\n- It is an extension for PostgreSQL, suggesting seamless integration within its environment.\n- pgvector supports operations such as storing, querying, and indexing vectors.\n- It is targeted at applications involving machine learning-generated vectors.\n- The latest known release of pgvector, version 0.7.0, has been made available.\n\n## Sources\n- \"Enable and use pgvector in Azure Database for PostgreSQL\"\n- \"Vector Similarity Search with PostgreSQL's pgvector\"\n- \"pgvector 0.7.0 Released!\"",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 6.23,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses what pgvector is and how it integrates with PostgreSQL."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "Every claim in the report is directly supported by the context provided."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers both what pgvector is and how it integrates with PostgreSQL, addressing all key aspects of the question."
+        },
+        "average": 1.0
+      }
+    },
+    {
+      "id": "dom-003",
+      "category": "domain",
+      "question": "What is Arize Phoenix used for in LLM applications?",
+      "report": "## Summary\nArize Phoenix is used in LLM applications for evaluating other LLMs in terms of relevance, toxicity, and quality of responses. It helps visualize complex decision-making, monitor performance, and manage costs and scalability.\n\n## Key findings\n- Arize Phoenix evaluates LLMs for parameters like relevance, toxicity, and response quality.\n- The tool records LLMs' decision-making paths for evaluation purposes using 'Traces.'\n- It helps data scientists visualize LLM decision-making processes and monitor false or misleading outputs.\n- Arize Phoenix is used for controlling costs and ensuring predictable spending and scalability in LLM applications.\n- It provides advanced capabilities for developers to fine-tune LLM performance through integration with tools like LlamaIndex.\n\n## Sources\n- Arize Phoenix for Large Language Model Evaluation\n- Langfuse vs. Arize AX / Arize Phoenix\n- Arize Phoenix vs proprietary tools: Cost-benefit analysis\n- Phoenix Archives",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 30.47,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses the use of Arize Phoenix in LLM applications, focusing on evaluation, visualization, and cost management."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "Every claim in the report is directly supported by the provided context."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers all key aspects of Arize Phoenix's use in LLM applications, including evaluation, visualization, monitoring, cost management, and scalability."
+        },
+        "average": 1.0
+      }
+    },
+    {
+      "id": "dom-004",
+      "category": "domain",
+      "question": "What does NetworkX do and when would you use it for graph storage?",
+      "report": "## Summary\nNetworkX is a Python package used for creating, manipulating, and studying complex network structures, dynamics, and functions. It is best suited for small to medium-sized graphs due to its versatility and ease of use, despite not having specialized graph storage capabilities like those found in Neo4j.\n\n## Key findings\n- NetworkX is designed for the creation, manipulation, and study of complex networks using Python.\n- It is well-suited for working with small to medium-sized graphs.\n- While it supports reading graphs stored in various common formats, it lacks the specialized storage capabilities found in databases like Neo4j.\n- NetworkX is not primarily focused on graphical representation or storage but rather on analyzing data using graph theory.\n\n## Sources\n- NetworkX \u2014 NetworkX documentation\n- Memgraph's Guide for NetworkX library\n- Tutorial \u2014 NetworkX 3.6.1 documentation",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 27.64,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly addresses what NetworkX does and its suitability for graph storage, as asked in the question."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "Every claim in the report is directly supported by the provided context."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers what NetworkX does and when it is used for graph storage, addressing both its capabilities and limitations."
+        },
+        "average": 1.0
+      }
+    },
+    {
+      "id": "cmp-001",
+      "category": "comparison",
+      "question": "How does Graph RAG differ from standard vector RAG?",
+      "report": "Response blocked by output validator.\n\nGroundedness score: 0.30\nReason: The report introduces the concept of Graph RAG, which is not mentioned in the provided context.\n\n---\nOriginal draft (for debugging):\n## Summary\nGraph RAG differs from standard vector RAG by utilizing graph-based data structures instead of vector-based structures, enabling more complex relationships and interconnections to be leveraged during retrieval and generation processes.\n\n## Key findings\n- RAG stands for Retrieval-Augmented Generation, optimizing large language model outputs by referencing external authoritative knowledge bases.\n- Standard vector RAG employs vector databases and similarity searches to retrieve information; examples include pgvector and Pinecone.\n- Graph RAG uses graph data structures for retrieval, allowing for the exploration of complex interconnections that extend beyond what vector-based methods can typically handle.\n\n## Sources\n- RAG Landscape\n- What is Retrieval-Augmented Generation (RAG)?\n- What is RAG? - Retrieval-Augmented Generation AI ...",
+      "blocked_by_guardrail": true,
+      "block_reason": "groundedness 0.30 below threshold \u2014 The report introduces the concept of Graph RAG, which is not mentioned in the provided context.",
+      "elapsed_seconds": 6.35,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses how Graph RAG differs from standard vector RAG by explaining the use of graph-based structures versus vector-based structures."
+        },
+        "groundedness": {
+          "score": 0.0,
+          "reasoning": "The report introduces Graph RAG, which is not mentioned in the provided context."
+        },
+        "completeness": {
+          "score": 0.7,
+          "reasoning": "The report covers the main differences between Graph RAG and standard vector RAG, focusing on the use of graph-based versus vector-based structures, but lacks detailed examples or further elaboration on the implications of these differences."
+        },
+        "average": 0.567
+      }
+    },
+    {
+      "id": "cmp-002",
+      "category": "comparison",
+      "question": "What are the tradeoffs between using gpt-4o and gpt-4o-mini for agent tasks?",
+      "report": "## Summary\nThe tradeoffs between using GPT-4o and GPT-4o-mini for agent tasks primarily involve balancing performance and efficiency. GPT-4o-mini offers reduced computational resource requirements, making it a more budget-friendly option with slightly less performance capability compared to the full GPT-4o model.\n\n## Key findings\n- GPT-4o-mini is designed to perform complex tasks while using less computational power, thus making it more efficient.\n- It is a budget-friendly option, primarily due to its reduced computational requirements.\n- The GPT-4o offers superior performance and capabilities compared to GPT-4o-mini.\n- Both models are designed with specific tradeoffs between efficiency, speed, cost, and reasoning capabilities, which should be considered when choosing between them.\n\n## Sources\n- A Guide to GPT4o Mini: OpenAI's smaller, more efficient...\n- Understanding GPT 4o mini\n- Compare GPT-4o vs GPT-4o1 vs O1-Mini: How to Choose",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 28.85,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses the tradeoffs between using GPT-4o and GPT-4o-mini for agent tasks."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "reasoning": "Most claims are supported by the context, but the specific comparison of performance capabilities between GPT-4o and GPT-4o-mini is not directly detailed."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers the tradeoffs between GPT-4o and GPT-4o-mini, addressing performance, efficiency, cost, and computational requirements."
+        },
+        "average": 0.9
+      }
+    },
+    {
+      "id": "rel-001",
+      "category": "relationship",
+      "question": "Which companies have adopted the Model Context Protocol?",
+      "report": "## Summary\nThe context does not specify any companies that have adopted the Model Context Protocol. The provided information focuses on the protocol's purpose and how it functions.\n\n## Key findings\n- The Model Context Protocol (MCP) is described as an open standard for enabling secure connections between data sources and AI-powered tools.\n- MCP serves as a standardization layer that facilitates communication between AI applications and external services.\n\n## Sources\n- Introducing the Model Context Protocol\n- What is Model Context Protocol (MCP)?\n- What is the Model Context Protocol (MCP)?",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 7.01,
+      "scores": {
+        "relevance": {
+          "score": 0.0,
+          "reasoning": "The report does not address the question about which companies have adopted the Model Context Protocol."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "The report accurately reflects the context, noting the absence of specific companies adopting the Model Context Protocol and summarizing the protocol's purpose and function."
+        },
+        "completeness": {
+          "score": 0.0,
+          "reasoning": "The report does not address the key aspect of identifying companies that have adopted the Model Context Protocol."
+        },
+        "average": 0.333
+      }
+    },
+    {
+      "id": "rel-002",
+      "category": "relationship",
+      "question": "What tools are commonly used in modern LLM observability stacks?",
+      "report": "## Summary\nCommon tools used in modern LLM observability stacks include Galileo, LangSmith, Arize AI, Langfuse, Braintrust, Helicone, and AgentOps. These tools are used for monitoring various aspects like costs, token usage, function calls, and metadata.\n\n## Key findings\n- Observability in LLMs involves monitoring and understanding the internal states through outputs.\n- In 2026, some of the best tools for LLM observability are Galileo, LangSmith, Arize AI, Langfuse, Braintrust, Helicone, and AgentOps.\n- Tools are used to instrument and monitor aspects such as costs, token usage, function calling, and metadata.\n- Specific platforms like Arize Phoenix offer capabilities such as distributed tracing and performance evaluation.\n\n## Sources\n- What is LLM Observability & Monitoring?\n- 8 Best AI and LLM Observability Tools in 2026\n- What are the best open source LLM observability platforms ...\n- What is Arize Phoenix?\n- Langfuse vs. Arize AX / Arize Phoenix",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 35.99,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses the question by listing and describing tools commonly used in modern LLM observability stacks."
+        },
+        "groundedness": {
+          "score": 1.0,
+          "reasoning": "Every claim in the report is directly supported by the provided context."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers the key aspect of listing common tools used in modern LLM observability stacks."
+        },
+        "average": 1.0
+      }
+    },
+    {
+      "id": "cur-001",
+      "category": "current",
+      "question": "What are the latest developments in retrieval-augmented generation in 2026?",
+      "report": "Request blocked by input filter.\n\nReason: out_of_scope: The question is about future developments, which cannot be addressed as it is beyond the current knowledge cutoff.",
+      "blocked_by_guardrail": true,
+      "block_reason": "out_of_scope: The question is about future developments, which cannot be addressed as it is beyond the current knowledge cutoff.",
+      "elapsed_seconds": 1.19,
+      "scores": {
+        "relevance": {
+          "score": 0.0,
+          "reasoning": "The report does not address the question at all, as it only states a limitation without providing any relevant information."
+        },
+        "groundedness": {
+          "score": 0.0,
+          "reasoning": "no retrieved context \u2014 report cannot be grounded"
+        },
+        "completeness": {
+          "score": 0.0,
+          "reasoning": "The report does not address any key aspects of the question about the latest developments in retrieval-augmented generation in 2026."
+        },
+        "average": 0.0
+      }
+    },
+    {
+      "id": "edge-001",
+      "category": "edge",
+      "question": "What is the capital of France?",
+      "report": "Request blocked by input filter.\n\nReason: out_of_scope: This is a general knowledge question, not a research question.",
+      "blocked_by_guardrail": true,
+      "block_reason": "out_of_scope: This is a general knowledge question, not a research question.",
+      "elapsed_seconds": 1.08,
+      "scores": {
+        "relevance": {
+          "score": 0.0,
+          "reasoning": "The report does not address the question at all."
+        },
+        "groundedness": {
+          "score": 0.0,
+          "reasoning": "no retrieved context \u2014 report cannot be grounded"
+        },
+        "completeness": {
+          "score": 0.0,
+          "reasoning": "The report does not address the question at all."
+        },
+        "average": 0.0
+      }
+    },
+    {
+      "id": "edge-002",
+      "category": "edge",
+      "question": "Explain how prompt engineering affects agent quality in research workflows.",
+      "report": "## Summary\nPrompt engineering significantly influences the quality of AI agents used in research workflows. Higher-quality prompts lead to improved outputs from Large Language Models (LLMs), indicating that effective prompt engineering is a crucial skill for enhancing agent performance in research contexts.\n\n## Key Findings\n- Higher-quality prompt engineering skills are directly correlated with the improved quality of outputs from Large Language Models.\n- Effective prompt engineering is essential for the development of single-task AI agents, as accurate prompts improve the functionality and reliability of the agents.\n- Context engineering, a part of prompt engineering, is a vital aspect in developing efficient deep research agents.\n\n## Sources\n- Building AI Agents: Prompt Engineering for Beginners [Part 3]\n- AI literacy and its implications for prompt engineering ...\n- Building a Deep Research Agent",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 6.45,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly addresses how prompt engineering affects agent quality in research workflows, focusing on its impact on AI agent performance."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "reasoning": "Most claims are supported by the context, but the specific mention of 'single-task AI agents' and 'context engineering' as part of prompt engineering is not directly covered."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers how prompt engineering affects agent quality in research workflows, addressing its impact on output quality, agent functionality, and the importance of context engineering."
+        },
+        "average": 0.9
+      }
+    }
+  ]
+}

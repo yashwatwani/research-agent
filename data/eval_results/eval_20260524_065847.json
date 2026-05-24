@@ -1,0 +1,73 @@
+{
+  "run_id": "20260524_065847",
+  "started_at": "2026-05-24T06:58:47.011799Z",
+  "total_elapsed_seconds": 38.8,
+  "aggregate": {
+    "total_questions": 2,
+    "valid_runs": 2,
+    "agent_errors": 0,
+    "blocked_by_guardrail": 1,
+    "mean_scores": {
+      "relevance": 0.5,
+      "groundedness": 0.35,
+      "completeness": 0.5,
+      "average": 0.45
+    },
+    "per_category": {
+      "edge": {
+        "n": 2,
+        "mean_average": 0.45
+      }
+    }
+  },
+  "results": [
+    {
+      "id": "edge-001",
+      "category": "edge",
+      "question": "What is the capital of France?",
+      "report": "Request blocked by input filter.\n\nReason: out_of_scope: This is a factual question rather than a research inquiry.",
+      "blocked_by_guardrail": true,
+      "block_reason": "out_of_scope: This is a factual question rather than a research inquiry.",
+      "elapsed_seconds": 3.4,
+      "scores": {
+        "relevance": {
+          "score": 0.0,
+          "reasoning": "The report does not address the question at all."
+        },
+        "groundedness": {
+          "score": 0.0,
+          "reasoning": "no retrieved context \u2014 report cannot be grounded"
+        },
+        "completeness": {
+          "score": 0.0,
+          "reasoning": "The report does not address the question at all."
+        },
+        "average": 0.0
+      }
+    },
+    {
+      "id": "edge-002",
+      "category": "edge",
+      "question": "Explain how prompt engineering affects agent quality in research workflows.",
+      "report": "## Summary\nPrompt engineering significantly impacts the quality of agent performance in research workflows, with well-crafted prompts leading to higher-quality outputs and fewer errors. Properly designed prompts can prevent issues such as skipped sources, thereby enhancing the capabilities and effectiveness of AI agents.\n\n## Key findings\n- High-quality prompt engineering skills enhance the quality of Large Language Model (LLM) outputs, indicating its critical role in improving AI agent performance.\n- Appropriate prompt design can prevent errors such as skipped pages, directly improving the research output of AI agents.\n- There are discrepancies in the effectiveness of prompt engineering advice, highlighting the importance of empirical verification in refining prompt engineering techniques.\n\n## Sources\n- Building AI Agents: Prompt Engineering for Beginners [Part 3]\n- AI literacy and its implications for prompt engineering ...\n- Building a Deep Research Agent\n- Lessons from prompt engineering a deep research agent ...",
+      "blocked_by_guardrail": false,
+      "block_reason": null,
+      "elapsed_seconds": 30.12,
+      "scores": {
+        "relevance": {
+          "score": 1.0,
+          "reasoning": "The report directly and completely addresses how prompt engineering affects agent quality in research workflows."
+        },
+        "groundedness": {
+          "score": 0.7,
+          "reasoning": "Most claims are supported by the context, but the report infers some details not explicitly stated, such as the direct link between prompt design and fewer errors."
+        },
+        "completeness": {
+          "score": 1.0,
+          "reasoning": "The report thoroughly covers how prompt engineering affects agent quality in research workflows, addressing both the impact on performance and error prevention."
+        },
+        "average": 0.9
+      }
+    }
+  ]
+}

@@ -294,3 +294,261 @@ if you want the agent to search more often, lower if you want it to
 rely on memory more.
 **Lesson:** The threshold is the key tuning parameter for the
 memory vs search tradeoff. It directly controls cost and freshness.
+
+# --- PHASE 7 ADDITIONS — append to bottom of LEARNINGS.md ---
+
+## Components added in Phase 7
+
+### OpenTelemetry
+**What it does:** Industry standard for emitting traces and spans from
+applications. Phoenix is just one OTel consumer. By emitting spans
+through OTel we get vendor neutrality — same instrumentation works
+with Phoenix, Datadog, Honeycomb, or anything else that speaks OTel.
+**Where we use it:** `src/guardrails/logger.py` emits spans for every
+guardrail event so they show up in the Phoenix UI alongside the agent
+traces.
+**Why it matters:** The OpenAI SDK is already auto-instrumented by
+Phoenix's `register()` call. Manually emitting our own spans lets us
+trace logic that is not an API call — guardrail decisions, dedup
+skips, query routing.
+
+---
+
+### SHA-256 hashing
+**What it does:** Deterministic one-way function that converts any text
+into a fixed 64-character hex string. Same input always produces the
+same output. Different input almost certainly produces a different
+output (collisions are astronomically rare).
+**Why we use it:** Dedup. We hash each chunk and each source so the
+database can answer "have I seen this exact text before?" in O(1) via
+an indexed lookup.
+**Where it lives:** `_hash()` helper in `vector_store.py` and
+`graph_store.py`.
+**Lesson:** Hashing is the right tool when you need to compare large
+blobs of text for exact equality without storing or scanning the
+original text.
+
+---
+
+## Doubts & explanations
+
+### Why dedupe on content hash and not on URL?
+**Phase:** 7 — dedup
+**What happened:** The first instinct was to check "have I seen this
+URL before?" — simpler, one column to compare. But that breaks two
+real cases:
+- Same URL, content changed (article was updated since last visit) →
+  URL-based check skips the update, vector store stays stale.
+- Different URLs quoting the same text (two news sites republishing
+  the same Reuters paragraph) → URL-based check stores the duplicate
+  paragraph twice, polluting retrieval with redundant chunks.
+**Fix:** Hash the content itself. URL is metadata only.
+**Lesson:** Dedup on what you actually stored, not on where it came from.
+
+---
+
+### Why two layers of dedup — source AND chunk?
+**Phase:** 7 — dedup
+**What it is:**
+- Source-level dedup lives in `graph_store.py`. Hashes the full source
+  text. If seen → skip entity extraction (the expensive gpt-4o call).
+- Chunk-level dedup lives in `vector_store.py`. Hashes each chunk. If
+  seen → skip embedding + insert.
+**Why both:** They catch different failure modes.
+- Source-level catches "same article ingested twice" — fast, blocks the
+  most expensive call (gpt-4o entity extraction).
+- Chunk-level catches "different articles sharing a paragraph" — keeps
+  the vector store clean of duplicate text even when source hashes
+  differ.
+**Lesson:** Defence in depth. The two layers are not redundant — they
+catch genuinely different cases.
+
+---
+
+### Why pre-check before embed instead of just relying on ON CONFLICT?
+**Phase:** 7 — dedup
+**What happened:** First instinct was to embed every chunk and let
+Postgres reject duplicates via `ON CONFLICT (content_hash) DO NOTHING`.
+Simpler code. But by the time the conflict fires we have already paid
+for the OpenAI embedding API call.
+**Fix:** Pre-check with a SELECT before embed. Skip the embedding
+entirely if the hash already exists.
+**Lesson:** When the expensive operation is the API call, not the DB
+write, do the lookup first. `ON CONFLICT` is the atomic safety net
+(handles race conditions if two processes insert simultaneously) but
+should not be the only line of defence.
+
+---
+
+### What does the UNIQUE index on content_hash actually do?
+**Phase:** 7 — dedup
+**What it is:** A Postgres database constraint that physically prevents
+two rows from sharing the same content_hash. Enforced at the storage
+engine level — not optional, not application logic.
+**Why it matters:** Without it, two parallel processes calling
+store_document with the same chunk could both pass the SELECT check
+(neither sees the other yet), both call embed_text, and both try to
+INSERT — getting two duplicate rows. The UNIQUE index makes the
+second INSERT fail (or with `ON CONFLICT DO NOTHING`, silently skip).
+**Lesson:** Application-level checks are an optimisation. The
+database-level constraint is the actual guarantee.
+
+---
+
+### What are guardrails and why do we need them?
+**Phase:** 7 — guardrails
+**What they are:** Deterministic checks that wrap around the
+non-deterministic LLM. They sit at three points: before the LLM sees
+the input, between the LLM and any tool it wants to call, and after
+the LLM produces output.
+**Why:** An LLM is non-deterministic by design. Same input can produce
+different outputs. Guardrails are the deterministic floor that makes
+the system predictable enough to ship.
+**What they catch:**
+- Input filter: prompt injection, out-of-scope questions, garbage input.
+- Tool allow-list: unknown or hallucinated tool names.
+- Output validator: hallucinated claims not grounded in retrieved context.
+**Lesson:** LLMs alone are not production systems. Guardrails are what
+turn an LLM into a system you can rely on.
+
+---
+
+### Why two-stage input filtering (regex then LLM)?
+**Phase:** 7 — guardrails
+**What happens:** Stage 1 runs a list of regex patterns against the
+question. Cheap, no API call. Catches obvious injection attempts like
+"ignore previous instructions" or fake system headers. Stage 2, only
+if stage 1 passes, calls gpt-4o-mini to classify the input as allow,
+block, or out_of_scope.
+**Why both:** Regex is free but only catches what you anticipated.
+LLM classifier catches paraphrased attacks regex would miss
+("forget what you were told before" instead of "ignore previous
+instructions") but costs an API call per question. Running regex
+first means most legitimate questions skip the LLM call entirely.
+**Lesson:** Stack cheap deterministic checks first, expensive LLM
+checks second. Most traffic terminates at the cheap layer.
+
+---
+
+### What does fail open mean and why use it for classifier errors?
+**Phase:** 7 — guardrails
+**What it is:** If the LLM classifier returns garbage that we cannot
+parse, we let the request through anyway and log a warning. The
+alternative — failing closed — would block the request.
+**Why fail open here:** A classifier returning malformed JSON is a
+transient LLM jitter, not evidence of a real attack. Blocking
+legitimate users due to model variance creates more harm than letting
+an occasional edge case through.
+**Why NOT fail open everywhere:** For high-stakes systems (financial
+transactions, medical advice) you fail closed — better to refuse than
+risk wrong actions. For a research agent reading public web data,
+fail open is the right tradeoff.
+**Lesson:** Fail mode is a product decision, not just an engineering one.
+
+---
+
+### What is LLM-as-judge and how does the output validator use it?
+**Phase:** 7 — guardrails
+**What it is:** Using one LLM call to evaluate the output of another.
+Here gpt-4o sees the question, the retrieved context, and the
+generated report — and returns a groundedness score from 0.0 to 1.0
+plus a one-sentence reasoning.
+**Why it works:** Judging whether claims are supported by source text
+is a simpler task than generating the report in the first place. The
+judge can be the same model size — gpt-4o judging gpt-4o output works
+fine in practice because the criterion is "is this claim in the
+context, yes or no."
+**Threshold:** Starts at 0.5. The actual right threshold depends on
+how strict you want to be — tune by inspecting the JSONL logs after
+running real queries.
+**Lesson:** Same model used as a judge often catches mistakes the
+generator made. The two tasks (generate vs verify) are different
+enough that the judge is not just confirming its own bias.
+
+---
+
+### What is the difference between guardrails and evals?
+**Phase:** 7 — guardrails
+**Same scoring logic, different jobs.**
+- Guardrails run every time, in production, on a single response, and
+  block or warn based on the result.
+- Evals run in batch on a test set, give aggregate metrics, and tell
+  you whether the agent got better or worse between versions.
+**Practical impact:** The groundedness scoring code in
+`output_validator.py` is the same logic the eval suite will use.
+Guardrail = "block this one bad response now." Eval = "measure how
+often this kind of response happens across 100 test questions."
+**Lesson:** Build the scoring logic once. Use it twice. Online for
+guardrails, offline for evals.
+
+---
+
+### Why log to both JSONL and Phoenix?
+**Phase:** 7 — guardrails
+**Two sinks, two jobs:**
+- JSONL at `data/logs/guardrails.jsonl` is for batch analysis. Grep,
+  jq, feed into eval datasets, count violation types over time.
+- Phoenix spans are for debugging individual requests. When a specific
+  user request fails, see the guardrail span alongside the LLM calls
+  in the same trace.
+**Why not pick one:** JSONL alone means you cannot see violations in
+the context of a full agent run. Phoenix alone means you cannot do
+historical analysis across thousands of past requests.
+**Lesson:** Logging is not a single concern. Use the right sink for
+the right question.
+
+---
+
+### Why is the tool allow-list a soft check instead of a hard block?
+**Phase:** 7 — guardrails
+**What we chose:** Soft check, log violations only. If the agent tries
+to call a tool not in ALLOWED_TOOLS, we log the violation and return
+an error string. We do not raise an exception.
+**Why soft for this project:** The agent currently has one tool
+(search_web). Hard blocking would crash the agent loop. Soft logging
+captures the signal — when you later add a calculator tool and the
+agent suddenly tries to call weather_api (hallucinated), the JSONL
+log tells you exactly what happened.
+**When to go hard:** Production systems handling money, user data, or
+external side effects. Anywhere "wrong tool called" is a security
+issue, not a debugging signal.
+**Lesson:** Strictness is a function of blast radius. Match enforcement
+to consequences.
+
+---
+
+### Why does the validator run AFTER synthesise and not during?
+**Phase:** 7 — guardrails
+**Alternative considered:** Make the synthesise prompt enforce
+groundedness directly ("only use claims supported by the context").
+Cheaper — one LLM call instead of two.
+**Why we use a separate validator anyway:** Two reasons.
+- The generator is biased toward producing a complete answer. It has
+  an incentive to fill gaps with plausible-sounding inferences. The
+  validator is a fresh call with no such incentive.
+- The validator gives an explicit score we can log and tune against.
+  A prompt-only approach gives no signal — you cannot tell whether
+  the system is getting better or worse over time.
+**Lesson:** Verification and generation should be separate steps.
+Combining them hides failure signals.
+
+---
+
+### Why does the dedup function save only chunk hashes and source hashes, not the full source text?
+**Phase:** 7 — dedup
+**What happened:** A natural question — if we are hashing the full
+source text for dedup, why not store it too? Then we could re-chunk
+later with different settings without re-fetching from the web.
+**Why we did not:** Storage discipline. The full source is already
+represented across the chunks table (as ~5-10 chunk rows). Storing
+the original full text again would roughly double storage. The
+hashes alone are sufficient for the dedup job.
+**Tradeoff worth knowing:** If you ever want to experiment with
+different chunking strategies (chunk size 500 vs 300, different
+overlap), you cannot do that without re-fetching the source from
+the web — because the original is gone. For a learning project this
+is fine. For production at scale, store the full content too.
+**Lesson:** Store only what you need for the current job. Add storage
+later when a new use case justifies it.
+
+# --- END PHASE 7 ADDITIONS ---
