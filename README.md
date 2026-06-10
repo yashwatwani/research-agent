@@ -206,10 +206,10 @@ research-agent/
 | 1 | Project structure + OpenAI connection | Done |
 | 2 | Search MCP server | Done |
 | 3 | Phoenix tracing | Done |
-| 4 | RAG via pgvector | In progress |
-| 5 | Graph RAG via NetworkX | Upcoming |
-| 6 | ADK agent loop | Upcoming |
-| 7 | guardrails + full evals | Upcoming |
+| 4 | RAG via pgvector | Done |
+| 5 | Graph RAG via NetworkX | Done |
+| 6 | ADK agent loop | Done |
+| 7 | guardrails + full evals | Done |
 
 ---
 
